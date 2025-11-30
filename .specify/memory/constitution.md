@@ -26,60 +26,55 @@ Follow-up TODOs: None
 # AI-Native Interactive Book Constitution
 
 ## 1. Project Vision & Governance
-**Goal:** Build an "AI-Native Interactive Book" using Docusaurus (Frontend) and FastAPI (Backend) with an embedded RAG Chatbot.
-**Core Feature:** Users must be able to select text on the book to ask context-aware questions.
+**Goal:** Build an "AI-Native Interactive Book" hosted on GitHub Pages with an embedded RAG Chatbot.
+**Official Mandate:** Strictly follow the Panaversity Hackathon I guidelines (Google Doc).
 **Governance:**
-- **Supreme Law:** This file overrides all other defaults.
 - **ZERO VIBE CODING:** Development is FORBIDDEN without an existing `spec.md` and `plan.md`.
 - **Workflow:** `sp.specify` (Define) -> `sp.plan` (Architect) -> `sp.implement` (Code).
 
-## 2. Mandatory Tech Stack (Non-Negotiable)
-- **Frontend:** Docusaurus 3.9 (Classic Theme), React.
+## 2. Mandatory Tech Stack (The "Official" Stack)
+- **Frontend:** Docusaurus 3.9 (Classic), React, Tailwind CSS.
 - **Backend:** Python 3.10+, FastAPI, Uvicorn.
-- **AI Brain:** OpenAI Agents SDK (Reasoning) + Gemini Flash (Code Gen via Router).
-- **Vector Database:** Qdrant Cloud (Free Tier).
-- **Embeddings:** OpenAI `text-embedding-3-small` (Cost-efficient).
+- **AI Brain:** OpenAI Agents SDK (Logic) + Gemini Flash (via Router for Code Gen).
+- **Vector Database:** **Qdrant Cloud** (For RAG/Embeddings).
+- **Relational Database:** **Neon Serverless Postgres** (For Chat History & User Data).
+- **Deployment:** GitHub Pages (Frontend) & Vercel/Render (Backend).
 
-## 3. The "Matrix" Protocol (Reusable Intelligence)
-**Rule:** We build **"Agent Skills"**, not scripts.
+## 3. Feature Roadmap (Prioritized)
+**Phase 1: The Core (Must Complete First)**
+- RAG Chatbot answering from the book using Qdrant.
+- "Select Text" feature (Context-Aware API).
+- Reusable Skills (`skills/librarian.py`, `skills/publisher.py`).
+
+**Phase 2: The Bonus (Target: 50 Marks)**
+- **Authentication:** Implement `Better-Auth` for User Signup/Login.
+- **Personalization:** Store user preferences in Neon Postgres.
+
+## 4. The "Matrix" Protocol (Reusable Intelligence)
+**Rule:** We build **"Agent Skills"** located in `skills/`.
 - **Librarian Skill (`skills/ingest.py`):**
-    - MUST read all `.md` files from `book/docs/`.
-    - MUST use `RecursiveCharacterTextSplitter` (chunk size ~1000).
-    - MUST upload vectors to Qdrant collection `book_knowledge`.
+    - MUST read `.md` files -> Chunk -> Embed (OpenAI Small) -> Upload to Qdrant.
 - **Publisher Skill (`skills/publish.py`):**
-    - MUST build the Docusaurus site (`npm run build`).
-    - MUST deploy to GitHub Pages (`npm run deploy`).
+    - MUST build Docusaurus -> Deploy to GitHub Pages.
 
-## 4. RAG & Frontend-Backend Contract
-**The "Select Text" Feature Logic:**
-1.  **Frontend:** The Chat Widget must be injected into the Docusaurus `Layout` (using Swizzling or Wrapper) so it appears on *every* page.
-2.  **Event Listener:** The Widget must listen for `mouseup` events to capture selected text.
-3.  **API Payload:**
+## 5. RAG & API Contract
+**The "Select Text" Logic:**
+1.  **Frontend:** Widget listens for `mouseup` events on Docusaurus pages.
+2.  **API Payload:**
     ```json
     POST /chat
-    {}
+    {
       "message": "User question",
-      "context": "The text user selected (if any)"
+      "context": "Selected text (optional)",
+      "user_id": "From Better-Auth (optional)"
     }
     ```
-4.  **Backend Logic:** If `context` is provided, the Agent answers based on that. If not, it searches Qdrant (RAG).
+3.  **Backend Logic:**
+    - Save chat history to **Neon Postgres**.
+    - If `context` exists, answer from context. Else, search **Qdrant**.
 
-## 5. Directory Structure Map (Strict Enforcement)
-- `specs/` (Specs, Plans, Tasks)
-- `book/` (Docusaurus Frontend Source)
-- `backend/` (FastAPI Source & Virtual Env)
-- `skills/` (Reusable Agent Scripts)
-- `.specify/` (SpecKit Templates)
-- `.claude/` (Command definitions)
+## 6. Content Standards
+- **Writing Quality:** Book content must be Flesch-Kincaid Grade 10-12 (Professional & Clear).
+- **Source:** Content must be AI-generated based on the provided Topic.
 
-## 6. Development Guidelines
-- **Testing:** Verify the Chatbot works with AND without selected text.
-- **Deployment:** Ensure `docusaurus.config.js` is configured for GitHub Pages (baseUrl/url).
-- **ADR:** Document any schema changes in Qdrant via `sp.adr`.
-
-## 7. Content Standards & Quality
-- **Writing Clarity:** Book content MUST achieve a Flesch-Kincaid Grade Level of 10-12, with at least 75% of sentences in active voice (automatable check).
-- **Source Verification & Citation Accuracy:** All factual claims in the book content MUST be supported by external references, cited using a consistent format (e.g., Markdown footnotes or bibliography). References MUST be verifiable through a specified process (e.g., automated link checker for online sources, or manual review for academic papers).
-- **Content Review Process:** New or significantly updated book chapters MUST undergo a peer review process before merging, requiring at least one approval from a designated content reviewer.
-
-**Version**: 0.0.7 (Comprehensive) | **Ratified**: 2025-11-28
+**Version**: 1.0.0 (Official Compliant) | **Ratified**: 2025-11-29
