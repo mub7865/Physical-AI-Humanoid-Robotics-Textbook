@@ -89,15 +89,15 @@ const config: Config = {
           items: [
             {
               label: 'Module 1: ROS 2',
-              to: '/docs/chapter-2:-ros-2-fundamentals',
+              to: '/docs/chapter-2-ros2',
             },
             {
               label: 'Module 2: Simulation',
-              to: '/docs/chapter-3:-robot-simulation',
+              to: '/docs/chapter-3-simulation',
             },
             {
               label: 'Module 3: Isaac AI',
-              to: '/docs/chapter-4:-nvidia-isaac-platform',
+              to: '/docs/chapter-4-isaac',
             },
           ],
         },
