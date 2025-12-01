@@ -1,3 +1,6 @@
+---
+sidebar_label: 'Hardware Requirements'
+---
 # Chapter 8: Hardware Requirements – Building the Physical AI Lab 🛠️
 
 ## The Cost of Reality

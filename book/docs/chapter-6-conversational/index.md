@@ -1,3 +1,6 @@
+---
+sidebar_label: 'Conversational Robotics'
+---
 # Chapter 6: Conversational Robotics – The Voice of the Machine 🗣️🤖
 
 ## From Silent Servants to Social Companions

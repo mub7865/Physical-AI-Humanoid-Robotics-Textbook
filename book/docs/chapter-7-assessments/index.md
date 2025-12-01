@@ -1,3 +1,6 @@
+---
+sidebar_label: 'Assessments & Capstone Projects'
+---
 # Chapter 7: Assessments & Capstone Project 🏆
 
 ## Proving Your Skills

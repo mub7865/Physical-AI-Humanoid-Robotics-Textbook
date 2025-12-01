@@ -1,3 +1,6 @@
+---
+sidebar_label: 'Robot Simulation: Digital Twin'
+---
 # Chapter 3: Robot Simulation – The Digital Twin (Gazebo & Unity) 🌍
 
 ## The Flight Simulator for Robots

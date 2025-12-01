@@ -1,3 +1,6 @@
+---
+sidebar_label: 'Humanoid VLA Development'
+---
 # Chapter 5: Humanoid Robot Development & VLA 🤖🗣️
 
 ## The Final Frontier: Embodied Intelligence

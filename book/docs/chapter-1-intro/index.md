@@ -1,3 +1,6 @@
+---
+sidebar_label: 'Physical AI & Humanoid Robotics'
+---
 # Chapter 1: Introduction to Physical AI & Humanoid Robotics
 
 ## The Dawn of Embodied Intelligence

@@ -1,3 +1,6 @@
+---
+sidebar_label: 'AI-Robot Brain: NVIDIA Isaac Platform'
+---
 # Chapter 4: The AI-Robot Brain – NVIDIA Isaac™ Platform 👁️
 
 ## Giving Sight to the Machine

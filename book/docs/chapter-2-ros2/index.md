@@ -1,3 +1,6 @@
+---
+sidebar_label: 'ROS 2: Robotic Nervous System'
+---
 # Chapter 2: ROS 2 Fundamentals – The Robotic Nervous System 🧠⚡
 
 ## The Invisible Bridge
