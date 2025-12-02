@@ -4,3 +4,4 @@ backend/venv/
 book/build/
 book/.docusaurus/
 __pycache__/
+vercel.json
