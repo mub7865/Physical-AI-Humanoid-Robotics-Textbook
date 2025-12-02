@@ -27,7 +27,7 @@ Follow-up TODOs: None
 
 ## 1. Project Vision & Governance
 **Goal:** Build an "AI-Native Interactive Book" hosted on GitHub Pages with an embedded RAG Chatbot.
-**Official Mandate:** Strictly follow the Panaversity Hackathon I guidelines (Google Doc).
+**Official Mandate:** Strictly follow the Panaversity Hackathon I guidelines (specs/input/syllabus.md).
 **Governance:**
 - **ZERO VIBE CODING:** Development is FORBIDDEN without an existing `spec.md` and `plan.md`.
 - **Workflow:** `sp.specify` (Define) -> `sp.plan` (Architect) -> `sp.implement` (Code).
@@ -54,8 +54,8 @@ Follow-up TODOs: None
 **Rule:** We build **"Agent Skills"** located in `skills/`.
 - **Librarian Skill (`skills/ingest.py`):**
     - MUST read `.md` files -> Chunk -> Embed (OpenAI Small) -> Upload to Qdrant.
-- **Publisher Skill (`skills/publish.py`):**
-    - MUST build Docusaurus -> Deploy to GitHub Pages.
+- **Publisher Skill (.claude/skills/publisher/scripts/publish.py):**
+    - MUST build Docusaurus -> Deploy to GitHub Pages. Ensure proper Git credentials and permissions are configured for successful deployment.
 
 ## 5. RAG & API Contract
 **The "Select Text" Logic:**
