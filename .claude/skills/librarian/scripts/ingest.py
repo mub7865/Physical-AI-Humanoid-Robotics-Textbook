@@ -2,9 +2,10 @@ import os
 from openai import OpenAI
 from qdrant_client import QdrantClient, models
 from dotenv import load_dotenv
+import httpx
 
 load_dotenv()
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"), http_client=httpx.Client())
 qdrant_client = QdrantClient(url=os.getenv("QDRANT_URL"), api_key=os.getenv("QDRANT_API_KEY"))
 
 COLLECTION_NAME = "book_content"

@@ -5,7 +5,7 @@ from typing import List
 
 class QdrantClientService:
     def __init__(self):
-        self.collection_name = "book_knowledge"
+        self.collection_name = "book_content"
         self.client = self._initialize_qdrant_client()
 
     def _initialize_qdrant_client(self) -> QdrantClient:

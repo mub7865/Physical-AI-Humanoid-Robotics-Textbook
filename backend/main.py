@@ -34,7 +34,7 @@ app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -53,15 +53,15 @@ except Exception as e:
 
 
 class ChatMessage(BaseModel):
-    user_message: str
-    selected_text: Optional[str] = None
+    message: str
+    selected_context: Optional[str] = None
 
 
 @app.post("/chat")
 async def chat(message: ChatMessage):
     try:
         # 1. Get embedding for user message
-        user_embedding = openai_service.get_embedding(message.user_message)
+        user_embedding = openai_service.get_embedding(message.message)
 
         # 2. Search Qdrant for relevant book knowledge
         retrieved_chunks = qdrant_service.search_book_knowledge(user_embedding)
@@ -71,12 +71,12 @@ async def chat(message: ChatMessage):
         rag_prompt_parts = [
             "Use the following context from the book to answer the question:\n\nContext:"
         ]
-        if message.selected_text:
-            rag_prompt_parts.append(f"{message.selected_text}")
+        if message.selected_context:
+            rag_prompt_parts.append(f"{message.selected_context}")
         if retrieved_chunks_content:
             rag_prompt_parts.append(f"{retrieved_chunks_content}")
 
-        rag_prompt_parts.append(f"\nQuestion:\n{message.user_message}\n\nProvide a concise answer based on the provided context.")
+        rag_prompt_parts.append(f"\nQuestion:\n{message.message}\n\nProvide a concise answer based on the provided context.")
 
         rag_prompt = "\n".join(rag_prompt_parts)
 
@@ -85,19 +85,24 @@ async def chat(message: ChatMessage):
 
         # 5. Generate conversation_id and save chat history
         conversation_id = uuid4()
-        save_chat_history(
-            conversation_id=conversation_id,
-            user_message=message.user_message,
-            bot_response=bot_response,
-            selected_text=message.selected_text,
-        )
+        try:
+            save_chat_history(
+                conversation_id=str(conversation_id),
+                user_message=message.message,
+                bot_response=bot_response,
+                selected_text=message.selected_context,
+            )
+        except Exception as db_error:
+            print(f"⚠️ Warning: Database save failed, but continuing. Error: {db_error}")
 
-        return {"response": bot_response, "conversation_id": str(conversation_id)}
+        return {"reply": bot_response, "conversation_id": str(conversation_id)}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
-        print(f"An unexpected error occurred: {e}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        import traceback
+        error_details = traceback.format_exc()
+        print(f"❌ Critical Error: {error_details}")
+        raise HTTPException(status_code=500, detail=f"Server Error: {str(e)}")
 
 # Example of a simple root endpoint (optional, for testing if the server is running)
 @app.get("/")

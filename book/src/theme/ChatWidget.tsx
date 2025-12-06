@@ -51,7 +51,7 @@ const ChatWidget: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('https://physical-ai-humanoid-robotics-textb-one.vercel.app/', {
+      const response = await fetch('https://physical-ai-humanoid-robotics-textb-one.vercel.app/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

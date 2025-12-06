@@ -1,5 +1,7 @@
 node_modules/
 backend/venv/
+backend/.venv/
+backend/.venv_win/
 .env
 book/build/
 book/.docusaurus/
