@@ -98,11 +98,25 @@ async def chat(message: ChatMessage):
         return {"reply": bot_response, "conversation_id": str(conversation_id)}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+# ... imports
+import qdrant_client
+# ... existing imports
+
+# ... (inside chat function exception handler)
     except Exception as e:
         import traceback
         error_details = traceback.format_exc()
         print(f"❌ Critical Error: {error_details}")
-        raise HTTPException(status_code=500, detail=f"Server Error: {str(e)}")
+        
+        # Debugging info for Vercel
+        try:
+            client_version = qdrant_client.__version__
+            client_attrs = dir(qdrant_service.client) if qdrant_service and hasattr(qdrant_service, 'client') else "Client not initialized"
+        except:
+            client_version = "unknown"
+            client_attrs = "error getting attrs"
+
+        raise HTTPException(status_code=500, detail=f"Server Error: {str(e)} | Qdrant Version: {client_version} | Client Attrs: {str(client_attrs)[:200]}...")
 
 # Example of a simple root endpoint (optional, for testing if the server is running)
 @app.get("/")
