@@ -6,6 +6,7 @@ from typing import Optional
 from dotenv import load_dotenv
 from uuid import UUID, uuid4
 from contextlib import asynccontextmanager
+import qdrant_client
 
 from database import create_chat_history_table, save_chat_history
 from qdrant_service import QdrantClientService
@@ -98,11 +99,6 @@ async def chat(message: ChatMessage):
         return {"reply": bot_response, "conversation_id": str(conversation_id)}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
-# ... imports
-import qdrant_client
-# ... existing imports
-
-# ... (inside chat function exception handler)
     except Exception as e:
         import traceback
         error_details = traceback.format_exc()
