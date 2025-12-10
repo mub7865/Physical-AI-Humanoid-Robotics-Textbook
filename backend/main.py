@@ -1,7 +1,7 @@
 import os
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from fastapi.middleware.cors import CORSMiddleware    
+from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
 from dotenv import load_dotenv
 from uuid import UUID, uuid4
@@ -9,8 +9,7 @@ from contextlib import asynccontextmanager
 import qdrant_client
 
 from database import create_chat_history_table, save_chat_history
-from qdrant_service import QdrantClientService
-from openai_service import OpenAIService
+from agents.conversation_agent import ConversationAgent
 
 # Load environment variables from .env file
 load_dotenv()
@@ -19,7 +18,7 @@ load_dotenv()
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup event
-    print("Starting up FastAPI application...")
+    print("Starting up FastAPI application with Agent framework...")
     try:
         create_chat_history_table()
         print("Chat history table checked/created successfully.")
@@ -41,15 +40,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize services
+# Initialize Agent
 try:
-    openai_service = OpenAIService()
-    qdrant_service = QdrantClientService()
+    conversation_agent = ConversationAgent()
 except ValueError as e:
-    print(f"Environment variable error during service initialization: {e}")
+    print(f"Environment variable error during agent initialization: {e}")
     exit(1) # Exit if essential env vars are missing
 except Exception as e:
-    print(f"Error initializing services: {e}")
+    print(f"Error initializing agent: {e}")
     exit(1)
 
 
@@ -61,30 +59,13 @@ class ChatMessage(BaseModel):
 @app.post("/chat")
 async def chat(message: ChatMessage):
     try:
-        # 1. Get embedding for user message
-        user_embedding = openai_service.get_embedding(message.message)
+        # Process message through the conversation agent
+        bot_response = conversation_agent.process_message(
+            message=message.message,
+            selected_context=message.selected_context
+        )
 
-        # 2. Search Qdrant for relevant book knowledge
-        retrieved_chunks = qdrant_service.search_book_knowledge(user_embedding)
-        retrieved_chunks_content = "\n".join(retrieved_chunks)
-
-        # 3. Construct the RAG prompt
-        rag_prompt_parts = [
-            "Use the following context from the book to answer the question:\n\nContext:"
-        ]
-        if message.selected_context:
-            rag_prompt_parts.append(f"{message.selected_context}")
-        if retrieved_chunks_content:
-            rag_prompt_parts.append(f"{retrieved_chunks_content}")
-
-        rag_prompt_parts.append(f"\nQuestion:\n{message.message}\n\nProvide a concise answer based on the provided context.")
-
-        rag_prompt = "\n".join(rag_prompt_parts)
-
-        # 4. Generate response using OpenAI
-        bot_response = openai_service.generate_response(rag_prompt)
-
-        # 5. Generate conversation_id and save chat history
+        # Generate conversation_id and save chat history
         conversation_id = uuid4()
         try:
             save_chat_history(
@@ -103,16 +84,14 @@ async def chat(message: ChatMessage):
         import traceback
         error_details = traceback.format_exc()
         print(f"❌ Critical Error: {error_details}")
-        
-        # Debugging info for Vercel
-        try:
-            client_version = qdrant_client.__version__
-            client_attrs = dir(qdrant_service.client) if qdrant_service and hasattr(qdrant_service, 'client') else "Client not initialized"
-        except:
-            client_version = "unknown"
-            client_attrs = "error getting attrs"
 
-        raise HTTPException(status_code=500, detail=f"Server Error: {str(e)} | Qdrant Version: {client_version} | Client Attrs: {str(client_attrs)[:200]}...")
+        # Debugging info
+        try:
+            agent_info = f"Agent initialized: {conversation_agent is not None}"
+        except:
+            agent_info = "error getting agent info"
+
+        raise HTTPException(status_code=500, detail=f"Server Error: {str(e)} | Agent Info: {agent_info}")
 
 # Example of a simple root endpoint (optional, for testing if the server is running)
 @app.get("/")

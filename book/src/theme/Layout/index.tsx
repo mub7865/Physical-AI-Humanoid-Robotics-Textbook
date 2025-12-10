@@ -1,6 +1,6 @@
 import React from 'react';
 import Layout from '@theme-original/Layout';
-import ChatWidget from '../ChatWidget';
+import ChatKitWidget from '../ChatKitWidget';
 
 export default function LayoutWrapper(props) {
   return (
@@ -8,7 +8,7 @@ export default function LayoutWrapper(props) {
       <Layout {...props}>
         {props.children}
       </Layout>
-      <ChatWidget />
+      <ChatKitWidget />
     </>
   );
 }
