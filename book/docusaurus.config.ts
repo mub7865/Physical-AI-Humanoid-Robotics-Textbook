@@ -29,6 +29,11 @@ const config: Config = {
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
 
+  // Custom fields for runtime configuration
+  customFields: {
+    apiUrl: 'https://ai-driven-and-spec-driven-hackathon.vercel.app',
+  },
+
   // Internationalization configuration
   i18n: {
     defaultLocale: 'en',

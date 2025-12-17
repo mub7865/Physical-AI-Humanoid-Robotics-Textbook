@@ -1,0 +1,107 @@
+.toolbar {
+  position: sticky;
+  top: 60px;
+  z-index: 100;
+  background: var(--ifm-background-color);
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  padding: 12px 0;
+  margin-bottom: 20px;
+}
+
+.toolbarInner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.label {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 8px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 6px;
+  background: var(--ifm-background-color);
+  color: var(--ifm-font-color-base);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn:hover:not(:disabled) {
+  border-color: var(--ifm-color-primary);
+  color: var(--ifm-color-primary);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn.active {
+  background: var(--ifm-color-primary);
+  border-color: var(--ifm-color-primary);
+  color: white;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--ifm-color-emphasis-300);
+  border-top-color: var(--ifm-color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error {
+  font-size: 13px;
+  color: var(--ifm-color-danger);
+  margin-left: auto;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .toolbar {
+    top: 50px;
+  }
+
+  .toolbarInner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .buttonGroup {
+    width: 100%;
+  }
+
+  .btn {
+    flex: 1;
+    justify-content: center;
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}

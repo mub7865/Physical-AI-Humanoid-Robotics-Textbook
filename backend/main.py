@@ -1,18 +1,21 @@
 import os
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from dotenv import load_dotenv
+
+# Load environment variables FIRST before any other imports that use them
+load_dotenv()
+
+from fastapi import FastAPI, HTTPException, Depends
+from pydantic import BaseModel, Field
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
-from dotenv import load_dotenv
 from uuid import UUID, uuid4
 from contextlib import asynccontextmanager
 import qdrant_client
 
-from database import create_chat_history_table, save_chat_history
+from database import create_chat_history_table, save_chat_history, init_all_tables, clear_user_cache
 from agents.conversation_agent import ConversationAgent
-
-# Load environment variables from .env file
-load_dotenv()
+from auth import auth_router, profile_router, get_current_user, get_optional_user
+from services import PersonalizationService, TranslationService
 
 # --- Application Lifespan --- #
 @asynccontextmanager
@@ -20,17 +23,27 @@ async def lifespan(app: FastAPI):
     # Startup event
     print("Starting up FastAPI application with Agent framework...")
     try:
-        create_chat_history_table()
-        print("Chat history table checked/created successfully.")
+        # Initialize all database tables (users, profiles, sessions, cache, chat_history)
+        init_all_tables()
+        print("All database tables checked/created successfully.")
     except Exception as e:
-        print(f"Failed to create chat history table on startup: {e}")
+        print(f"Failed to initialize database tables on startup: {e}")
         # Depending on criticality, you might want to raise here or log and continue
     yield
     # Shutdown event
     print("Shutting down FastAPI application.")
 
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(
+    title="Physical AI & Humanoid Robotics Textbook API",
+    description="RAG-powered chatbot with user authentication and content personalization",
+    version="2.0.0",
+    lifespan=lifespan
+)
+
+# Register auth routes (T021)
+app.include_router(auth_router)
+app.include_router(profile_router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -97,3 +110,124 @@ async def chat(message: ChatMessage):
 @app.get("/")
 async def read_root():
     return {"message": "RAG Chatbot Backend is running!"}
+
+
+# ============================================
+# T033: Personalization Endpoints
+# ============================================
+personalization_service = PersonalizationService()
+translation_service = TranslationService()
+
+
+class PersonalizeRequest(BaseModel):
+    chapter_id: str
+    content: str = Field(..., max_length=50000)  # 50KB limit
+    use_cache: bool = True
+
+
+class TranslateRequest(BaseModel):
+    chapter_id: str
+    content: str = Field(..., max_length=50000)  # 50KB limit
+    target_language: str = "roman_urdu"
+    use_cache: bool = True
+
+
+class CacheClearRequest(BaseModel):
+    chapter_id: Optional[str] = None
+
+
+@app.post("/api/personalize")
+async def personalize_content(
+    request: PersonalizeRequest,
+    current_user: dict = Depends(get_current_user)
+):
+    """
+    T033: Personalize chapter content based on user's background profile.
+    Requires authentication.
+    """
+    try:
+        result = personalization_service.personalize_content(
+            user_id=str(current_user["id"]),
+            chapter_id=request.chapter_id,
+            content=request.content,
+            use_cache=request.use_cache
+        )
+        return result
+    except ValueError as e:
+        error_code = str(e)
+        if error_code == "PROFILE_NOT_FOUND":
+            raise HTTPException(
+                status_code=404,
+                detail={"error": "PROFILE_NOT_FOUND", "message": "User profile required for personalization"}
+            )
+        raise HTTPException(status_code=400, detail=str(e))
+    except RuntimeError as e:
+        error_msg = str(e)
+        if "AI_SERVICE_ERROR" in error_msg:
+            raise HTTPException(
+                status_code=503,
+                detail={"error": "AI_SERVICE_ERROR", "message": "OpenAI API temporarily unavailable"}
+            )
+        raise HTTPException(status_code=500, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.delete("/api/personalize/cache")
+async def clear_personalization_cache(
+    request: CacheClearRequest,
+    current_user: dict = Depends(get_current_user)
+):
+    """Clear personalized content cache for current user."""
+    try:
+        count = clear_user_cache(str(current_user["id"]), request.chapter_id)
+        return {"message": "Cache cleared successfully", "chapters_cleared": count}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ============================================
+# T041: Translation Endpoints
+# ============================================
+@app.post("/api/translate")
+async def translate_content(
+    request: TranslateRequest,
+    current_user: Optional[dict] = Depends(get_optional_user)
+):
+    """
+    T041: Translate chapter content to Roman Urdu.
+    Works for both authenticated and guest users.
+    """
+    try:
+        result = translation_service.translate_content(
+            chapter_id=request.chapter_id,
+            content=request.content,
+            target_language=request.target_language,
+            use_cache=request.use_cache,
+            user_id=str(current_user["id"]) if current_user else None
+        )
+        return result
+    except ValueError as e:
+        error_code = str(e)
+        if error_code == "UNSUPPORTED_LANGUAGE":
+            raise HTTPException(
+                status_code=400,
+                detail={"error": "UNSUPPORTED_LANGUAGE", "message": "Only roman_urdu is supported"}
+            )
+        raise HTTPException(status_code=400, detail=str(e))
+    except RuntimeError as e:
+        error_msg = str(e)
+        if "AI_SERVICE_ERROR" in error_msg:
+            raise HTTPException(
+                status_code=503,
+                detail={"error": "AI_SERVICE_ERROR", "message": "OpenAI API temporarily unavailable"}
+            )
+        raise HTTPException(status_code=500, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/translate/languages")
+async def get_supported_languages():
+    """Get list of supported translation languages."""
+    return TranslationService.get_supported_languages()

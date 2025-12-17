@@ -1,0 +1,153 @@
+/* Chapter Component Styles */
+
+.buttonContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.actionButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ifm-color-primary);
+  background: transparent;
+  border: 1px solid var(--ifm-color-primary);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.actionButton:hover:not(:disabled) {
+  background: var(--ifm-color-primary-lightest);
+}
+
+.actionButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.actionButton.active {
+  background: var(--ifm-color-primary);
+  color: white;
+}
+
+.actionButton.active:hover:not(:disabled) {
+  background: var(--ifm-color-primary-dark);
+}
+
+.translateButton {
+  border-color: var(--ifm-color-success);
+  color: var(--ifm-color-success);
+}
+
+.translateButton:hover:not(:disabled) {
+  background: var(--ifm-color-success-lightest, rgba(0, 200, 83, 0.1));
+}
+
+.translateButton.active {
+  background: var(--ifm-color-success);
+  color: white;
+}
+
+.translateButton.active:hover:not(:disabled) {
+  background: var(--ifm-color-success-dark);
+}
+
+.icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.errorToast {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  right: 0;
+  padding: 0.5rem 1rem;
+  background: var(--ifm-color-danger-lightest);
+  border: 1px solid var(--ifm-color-danger-light);
+  border-radius: 6px;
+  color: var(--ifm-color-danger-dark);
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  z-index: 100;
+  white-space: nowrap;
+}
+
+.closeError {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 0 0.25rem;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.closeError:hover {
+  opacity: 0.7;
+}
+
+/* Chapter Toolbar */
+.chapterToolbar {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--ifm-background-surface-color);
+  border-radius: 8px;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  flex-wrap: wrap;
+}
+
+.toolbarLabel {
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--ifm-color-secondary);
+  margin-right: 0.5rem;
+}
+
+/* Content Indicators */
+.contentIndicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 4px;
+  margin-left: auto;
+}
+
+.personalizedIndicator {
+  background: var(--ifm-color-primary-lightest);
+  color: var(--ifm-color-primary-dark);
+}
+
+.translatedIndicator {
+  background: var(--ifm-color-success-lightest, rgba(0, 200, 83, 0.1));
+  color: var(--ifm-color-success-dark, #00804d);
+}

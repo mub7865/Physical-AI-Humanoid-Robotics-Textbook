@@ -1,0 +1,263 @@
+/* Auth Component Styles */
+
+.authContainer {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: var(--ifm-background-color);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.authTitle {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  color: var(--ifm-heading-color);
+}
+
+.authSubtitle {
+  font-size: 0.95rem;
+  color: var(--ifm-color-secondary);
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.authForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ifm-font-color-base);
+}
+
+.input,
+.textarea {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  background: var(--ifm-background-surface-color);
+  color: var(--ifm-font-color-base);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 0 0 3px var(--ifm-color-primary-lighter);
+}
+
+.input:disabled,
+.textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.error {
+  padding: 0.75rem 1rem;
+  background: var(--ifm-color-danger-lightest);
+  border: 1px solid var(--ifm-color-danger-light);
+  border-radius: 8px;
+  color: var(--ifm-color-danger-dark);
+  font-size: 0.875rem;
+}
+
+.submitButton {
+  padding: 0.875rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  background: var(--ifm-color-primary);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.submitButton:hover:not(:disabled) {
+  background: var(--ifm-color-primary-dark);
+}
+
+.submitButton:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.submitButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.secondaryButton {
+  padding: 0.875rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ifm-color-primary);
+  background: transparent;
+  border: 2px solid var(--ifm-color-primary);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.secondaryButton:hover:not(:disabled) {
+  background: var(--ifm-color-primary-lightest);
+}
+
+.secondaryButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.switchText {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.875rem;
+  color: var(--ifm-color-secondary);
+}
+
+.linkButton {
+  background: none;
+  border: none;
+  color: var(--ifm-color-primary);
+  cursor: pointer;
+  font-size: inherit;
+  text-decoration: underline;
+}
+
+.linkButton:hover {
+  color: var(--ifm-color-primary-dark);
+}
+
+/* Questionnaire Styles */
+.progressBar {
+  height: 6px;
+  background: var(--ifm-color-emphasis-200);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--ifm-color-primary);
+  transition: width 0.3s ease;
+}
+
+.stepIndicator {
+  font-size: 0.8rem;
+  color: var(--ifm-color-secondary);
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.questionStep {
+  margin-bottom: 1.5rem;
+}
+
+.questionTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--ifm-heading-color);
+}
+
+.optionsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.optionButton {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 1rem;
+  background: var(--ifm-background-surface-color);
+  border: 2px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  text-align: left;
+}
+
+.optionButton:hover {
+  border-color: var(--ifm-color-primary-light);
+  background: var(--ifm-color-primary-lightest);
+}
+
+.optionSelected {
+  border-color: var(--ifm-color-primary);
+  background: var(--ifm-color-primary-lightest);
+}
+
+.optionLabel {
+  font-weight: 600;
+  color: var(--ifm-font-color-base);
+  margin-bottom: 0.25rem;
+}
+
+.optionDesc {
+  font-size: 0.85rem;
+  color: var(--ifm-color-secondary);
+}
+
+.languageGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.languageButton {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  background: var(--ifm-background-surface-color);
+  border: 2px solid var(--ifm-color-emphasis-300);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.languageButton:hover {
+  border-color: var(--ifm-color-primary-light);
+}
+
+.languageSelected {
+  border-color: var(--ifm-color-primary);
+  background: var(--ifm-color-primary);
+  color: white;
+}
+
+.navButtons {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+
+/* Page Layout */
+.authPage {
+  min-height: calc(100vh - 60px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, var(--ifm-background-color) 0%, var(--ifm-color-emphasis-100) 100%);
+}

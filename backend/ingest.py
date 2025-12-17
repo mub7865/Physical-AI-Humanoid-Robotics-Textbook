@@ -88,13 +88,14 @@ def main():
     print(f"\nUploading {len(all_points)} chunks to Qdrant...")
     if all_points:
         try:
-            # Upload in batches
-            batch_size = 100
+            # Upload in smaller batches to avoid timeout
+            batch_size = 20
             for i in range(0, len(all_points), batch_size):
                 batch = all_points[i : i + batch_size]
                 qdrant_service.client.upsert(
                     collection_name=qdrant_service.collection_name,
-                    points=batch
+                    points=batch,
+                    wait=True
                 )
                 print(f"Uploaded batch {i // batch_size + 1}/{(len(all_points) + batch_size - 1) // batch_size}")
             print("Ingestion complete!")
