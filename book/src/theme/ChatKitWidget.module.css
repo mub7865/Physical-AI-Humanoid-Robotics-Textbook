@@ -143,7 +143,7 @@
 }
 
 /* Responsive styles for smaller screens */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .chatWindow {
     bottom: 0;
     right: 0;
@@ -203,9 +203,18 @@
   }
 }
 
-@media (max-width: 360px) {
+@media (max-width: 400px) {
   .chatWindow {
-    height: 65vh;
+    height: 60vh;
+    max-height: 400px;
+  }
+
+  .fab {
+    bottom: 10px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
   }
 
   .message {
@@ -215,5 +224,11 @@
 
   .chatInput {
     padding: 8px 10px;
+    font-size: 13px;
+  }
+
+  .sendButton {
+    padding: 8px 10px;
+    font-size: 13px;
   }
 }
