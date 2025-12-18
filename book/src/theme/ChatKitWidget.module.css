@@ -141,3 +141,79 @@
   background-color: var(--ifm-color-emphasis-500);
   cursor: not-allowed;
 }
+
+/* Responsive styles for smaller screens */
+@media (max-width: 480px) {
+  .chatWindow {
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    height: 70vh;
+    max-height: 500px;
+    border-radius: 16px 16px 0 0;
+    border-bottom: none;
+  }
+
+  .fab {
+    bottom: 15px;
+    right: 15px;
+    width: 45px;
+    height: 45px;
+    font-size: 20px;
+  }
+
+  .chatHeader {
+    padding: 12px 15px;
+  }
+
+  .chatHeader h3 {
+    font-size: 16px;
+  }
+
+  .messageList {
+    padding: 8px;
+  }
+
+  .message {
+    max-width: 85%;
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+
+  .chatInputContainer {
+    padding: 8px;
+  }
+
+  .chatInput {
+    padding: 10px 12px;
+    font-size: 14px;
+    margin-right: 8px;
+  }
+
+  .sendButton {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .contextBadge {
+    margin: 8px;
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .chatWindow {
+    height: 65vh;
+  }
+
+  .message {
+    max-width: 90%;
+    font-size: 13px;
+  }
+
+  .chatInput {
+    padding: 8px 10px;
+  }
+}
